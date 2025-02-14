@@ -42,7 +42,7 @@ public abstract class Animal extends Creature {
         if(!possibleCells.isEmpty()) {
             tempCell = possibleCells.get(rand.nextInt(possibleCells.size())); //Випадково обираємо, куди тварина переміститься
             synchronized (cell.allAnimals.get(getName())) {
-            synchronized (tempCell.allAnimals.get(getName())) {
+            synchronized (tempCell.newAnimals.get(getName())) {
                 tempCell.newAnimals.get(getName()).add(this);
                 cell.allAnimals.get(getName()).remove(this);
             }
