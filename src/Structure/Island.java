@@ -31,6 +31,7 @@ public class Island {
                 }
                 for (String animalName : AnimalTables.animalNames) {
                     currentCell.allAnimals.put(animalName, new ArrayList<>());
+                    currentCell.newAnimals.put(animalName, new ArrayList<>());
                     for (int iter = 0; iter < AnimalTables.maxOfEach[Arrays.asList(AnimalTables.animalNames).indexOf(animalName)]; iter++) {
                         currentCell.allAnimals.get(animalName).add(Animal.makeNew(animalName, currentCell, this));
                     }

@@ -15,7 +15,7 @@ public abstract class Herbivore extends Animal {
             Iterator<Plant> iterator = this.cell.plants.iterator();
             while (iterator.hasNext()) {
                 Plant plant = iterator.next();
-                cell.plants.remove(plant);
+                iterator.remove();
                 eatenKg = eatenKg + plant.getMass();
                 if (eatenKg >= getNeedToEat()) {
                     this.hunger = this.hunger - 1;

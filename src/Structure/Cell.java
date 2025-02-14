@@ -1,31 +1,33 @@
 package Structure;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import Creatures.*;
 
-public class Cell implements Runnable{
+public class Cell implements Runnable {
     private final Island island;
     public final int y;
     public final int x;
     public final ArrayList<Plant> plants = new ArrayList<>();
     public final ConcurrentHashMap<String, ArrayList<Animal>> allAnimals = new ConcurrentHashMap<>();
-    public boolean isBusy;
+    public final ConcurrentHashMap<String, ArrayList<Animal>> newAnimals = new ConcurrentHashMap<>();
 
     public Cell(int y, int x, Island island) {
         this.island = island;
         this.y = y;
         this.x = x;
-        isBusy = false;
     }
 
     private void allReproduce() {
         Plant.reproducePlants(this, this.island);
         for (List<Animal> animalType : allAnimals.values()) {
             if (animalType.isEmpty()) {
-                break;
+                continue;
             }
+            List<Animal> newAnimals = new ArrayList<>();
             for (Animal animal : animalType) {
                 animal.setReproduced(false);
             }
@@ -34,6 +36,7 @@ public class Cell implements Runnable{
                     animal.reproduce();
                 }
             }
+            animalType.addAll(newAnimals);
         }
     }
 
@@ -53,19 +56,25 @@ public class Cell implements Runnable{
     }
 
     private void allMove() {
-        for (List<Animal> animalType : allAnimals.values()) {
-            for (Animal animal : animalType) {
-                animal.move();
+        Iterator<ArrayList<Animal>> iterator1 = this.allAnimals.values().iterator();
+        while (iterator1.hasNext()) {
+            ArrayList<Animal> animalType = iterator1.next();
+            Iterator<Animal> iterator2 = animalType.iterator();
+            while (iterator2.hasNext()) {
+                iterator2.next().move();
             }
         }
     }
 
     @Override
     public void run() {
-        isBusy = true;
         allEat();
         allReproduce();
         allMove();
-        isBusy = false;
+        synchronized (allAnimals) {
+            for (Map.Entry<String, ArrayList<Animal>> entry : newAnimals.entrySet()) {
+                allAnimals.get(entry.getKey()).addAll(newAnimals.get(entry.getValue()));
+            }
+        }
     }
 }

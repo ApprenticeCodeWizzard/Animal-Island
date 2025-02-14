@@ -1,6 +1,8 @@
 package Creatures;
 import Structure.*;
 
+import java.util.ArrayList;
+
 public class Caterpillar extends Herbivore {
     public static final int maximum = 1000;
     private static final String name = "Caterpillar";
