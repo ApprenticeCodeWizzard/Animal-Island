@@ -66,7 +66,7 @@ public class Cell implements Runnable {
         for (Map.Entry<String, ArrayList<Animal>> entry : newAnimals.entrySet()) {
                     ArrayList<Animal> newAnimalsArray = newAnimals.get(entry.getValue());
                     if(newAnimalsArray == null) {
-                        return;
+                        break;
                     }
                     ArrayList<Animal> oldAnimalsArray = allAnimals.get(entry.getKey());
                     Iterator<Animal> iterator = oldAnimalsArray.iterator();
